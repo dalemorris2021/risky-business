@@ -2,7 +2,7 @@ use std::error::Error;
 
 use clap::Parser;
 
-/// Simple program to greet a person
+/// The classic board game Risk
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Args {
