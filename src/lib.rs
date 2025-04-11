@@ -31,7 +31,19 @@ impl Config {
 /// Contains the number of players
 #[derive(Debug)]
 struct PlayerCount {
-    value: u32,
+    value: u8,
+}
+
+impl TryFrom<u8> for PlayerCount {
+    type Error = &'static str;
+
+    fn try_from(count: u8) -> Result<Self, Self::Error> {
+        if count < 2 || count > 6 {
+            return Err("PlayerCount only accepts values between 2 and 6");
+        }
+
+        Ok(PlayerCount { value: count })
+    }
 }
 
 impl TryFrom<u32> for PlayerCount {
@@ -42,13 +54,25 @@ impl TryFrom<u32> for PlayerCount {
             return Err("PlayerCount only accepts values between 2 and 6");
         }
 
-        Ok(PlayerCount { value: count })
+        Ok(PlayerCount { value: count as u8 })
+    }
+}
+
+impl Into<u8> for PlayerCount {
+    fn into(self) -> u8 {
+        self.value
+    }
+}
+
+impl Into<u32> for PlayerCount {
+    fn into(self) -> u32 {
+        self.value as u32
     }
 }
 
 /// Runs this program with the given configuration
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    println!("num-players = {}", config.player_count.value);
+    println!("num-players = {}", Into::<u32>::into(config.player_count));
 
     Ok(())
 }
