@@ -2,8 +2,10 @@ use std::error::Error;
 
 use clap::Parser;
 
+pub mod models;
+
 /// The classic board game Risk
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Clone, Default, PartialEq, Eq)]
 #[command(version, about, long_about = None)]
 pub struct Args {
     /// Number of players
@@ -12,9 +14,9 @@ pub struct Args {
 }
 
 /// Contains the configuration for running this program
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Config {
-    player_count: PlayerCount,
+    pub player_count: PlayerCount,
 }
 
 impl Config {
@@ -30,9 +32,9 @@ impl Config {
 }
 
 /// Contains the number of players
-#[derive(Debug)]
-struct PlayerCount {
-    value: u8,
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Ord, Eq)]
+pub struct PlayerCount {
+    pub value: u8,
 }
 
 impl TryFrom<u32> for PlayerCount {
@@ -55,9 +57,7 @@ impl Into<u32> for PlayerCount {
     }
 }
 
-/// Runs this program with the given configuration
+/// Runs a game of Risk with the given configuration
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    println!("num-players = {}", Into::<u32>::into(config.player_count));
-
-    Ok(())
+    todo!("Implement the game logic for a game of Risk")
 }
