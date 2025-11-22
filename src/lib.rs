@@ -18,6 +18,7 @@ pub struct Config {
 }
 
 impl Config {
+    /// Builds a Config from command line arguments
     pub fn build(args: Args) -> Result<Self, &'static str> {
         let player_count = match PlayerCount::try_from(args.num_players) {
             Ok(count) => count,
@@ -34,21 +35,10 @@ struct PlayerCount {
     value: u8,
 }
 
-impl TryFrom<u8> for PlayerCount {
-    type Error = &'static str;
-
-    fn try_from(count: u8) -> Result<Self, Self::Error> {
-        if count < 2 || count > 6 {
-            return Err("PlayerCount only accepts values between 2 and 6");
-        }
-
-        Ok(PlayerCount { value: count })
-    }
-}
-
 impl TryFrom<u32> for PlayerCount {
     type Error = &'static str;
 
+    /// Tries to convert a u32 to a PlayerCount
     fn try_from(count: u32) -> Result<Self, Self::Error> {
         if count < 2 || count > 6 {
             return Err("PlayerCount only accepts values between 2 and 6");
@@ -58,13 +48,8 @@ impl TryFrom<u32> for PlayerCount {
     }
 }
 
-impl Into<u8> for PlayerCount {
-    fn into(self) -> u8 {
-        self.value
-    }
-}
-
 impl Into<u32> for PlayerCount {
+    /// Tries to convert a PlayerCount to a u32
     fn into(self) -> u32 {
         self.value as u32
     }
