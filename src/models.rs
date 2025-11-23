@@ -1,11 +1,9 @@
-use std::{collections::HashMap, hash::Hash, hash::Hasher, rc::Rc};
+use std::{
+    hash::{Hash, Hasher},
+    rc::Rc,
+};
 
-use rand::rngs::ThreadRng;
-
-/// The required behavior of an agent that can participate in an instance of a game
-pub trait Playable {
-    fn take_turn(game: &mut Game);
-}
+use rand::{rngs::ThreadRng, seq::SliceRandom};
 
 /// A game action taken by a player
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -42,12 +40,15 @@ impl Hash for Card {
 /// A player of a game of Risk
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Player {
+    pub id: u32,
     pub name: String,
+    pub player_armies: i32,
+    pub player_cards: Vec<Card>,
 }
 
-impl Playable for Player {
-    fn take_turn(game: &mut Game) {
-        todo!("Implement logic for player taking a turn");
+impl Player {
+    pub fn take_turn(game: &mut Game) {
+        todo!()
     }
 }
 
@@ -70,14 +71,62 @@ pub struct Continent {
 
 /// A game of Risk
 pub struct Game {
-    pub deck: Vec<Card>,
-    pub players: HashMap<u32, Player>,
-    pub player_armies: HashMap<u32, i32>,
-    pub player_cards: HashMap<u32, Vec<Card>>,
+    pub rng: ThreadRng,
+    pub is_running: bool,
+    pub players: Vec<Player>,
     pub turn: Box<dyn Iterator<Item = Player>>,
     pub territories: Vec<Territory>,
     pub continents: Vec<Continent>,
+    pub deck: Vec<Card>,
     pub available_actions: Vec<Action>,
     pub taken_actions: Vec<Action>,
-    pub rand: ThreadRng,
+}
+
+impl Game {
+    /// Creates a new Game with the given data
+    pub fn new(
+        players: Vec<Player>,
+        territories: Vec<Territory>,
+        continents: Vec<Continent>,
+        cards: Vec<Card>,
+    ) -> Self {
+        let mut rng = rand::rng();
+        let is_running = true;
+
+        let mut players = players;
+        players.shuffle(&mut rng);
+        let players = players;
+
+        let turn: Box<dyn Iterator<Item = Player>> = build_turn();
+
+        let mut deck = cards;
+        deck.shuffle(&mut rng);
+
+        let available_actions: Vec<Action> = Vec::new();
+        let taken_actions: Vec<Action> = Vec::new();
+
+        Game {
+            rng,
+            is_running,
+            players,
+            turn,
+            territories,
+            continents,
+            deck,
+            available_actions,
+            taken_actions,
+        }
+    }
+
+    pub fn draw(&self) {
+        todo!()
+    }
+
+    pub fn update(&mut self) {
+        todo!()
+    }
+}
+
+pub fn build_turn() -> Box<dyn Iterator<Item = Player>> {
+    todo!()
 }
