@@ -52,7 +52,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 
     let players: Vec<Player> = match build_players() {
         Err(e) => return Err(e),
-        Ok(ps) => ps,
+        Ok(players) => players,
     };
 
     let territories = load_territories(territories_path);
@@ -63,8 +63,8 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 
     // Game loop
     while game.is_running {
+        game.take_turn();
         game.draw();
-        game.update();
     }
 
     Ok(())

@@ -74,7 +74,7 @@ pub struct Game {
     pub rng: ThreadRng,
     pub is_running: bool,
     pub players: Vec<Player>,
-    pub turn: Box<dyn Iterator<Item = Player>>,
+    pub turn: Box<dyn Iterator<Item = u32>>,
     pub territories: Vec<Territory>,
     pub continents: Vec<Continent>,
     pub deck: Vec<Card>,
@@ -97,7 +97,11 @@ impl Game {
         players.shuffle(&mut rng);
         let players = players;
 
-        let turn: Box<dyn Iterator<Item = Player>> = build_turn();
+        let mut turns: Vec<u32> = Vec::new();
+        for player in &players {
+            turns.push(player.id);
+        }
+        let turn = Box::new(turns.into_iter().cycle());
 
         let mut deck = cards;
         deck.shuffle(&mut rng);
@@ -118,15 +122,11 @@ impl Game {
         }
     }
 
+    pub fn take_turn(&mut self) {
+        todo!()
+    }
+
     pub fn draw(&self) {
         todo!()
     }
-
-    pub fn update(&mut self) {
-        todo!()
-    }
-}
-
-pub fn build_turn() -> Box<dyn Iterator<Item = Player>> {
-    todo!()
 }
