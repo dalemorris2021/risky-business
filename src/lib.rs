@@ -75,7 +75,7 @@ pub fn build_players() -> Result<Vec<Player>, Box<dyn Error>> {
 }
 
 pub fn load_territories(territories_path: PathBuf) -> Vec<Territory> {
-    todo!()
+    todo!("Load territories as a list of territories and an adjacency matrix of connections")
 }
 
 pub fn load_continents(continents_path: PathBuf) -> Vec<Continent> {
